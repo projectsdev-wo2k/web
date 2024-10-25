@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<body>
+<iframe id="widgetFrame" src="https://socialrating.ultimamarkets.com/widgets/ratings?widgetKey=social-ratings" scrolling="no" frameborder="0" style="min-width: 100%; height: 1371px; overflow: hidden;"></iframe>
+
+<script>
+  fetch('https://ipapi.co/json/')
+    .then(response => response.json())
+    .then(data => {
+      let countryCode = data.country_code;
+      let iframe = document.getElementById('widgetFrame');
+
+
+      let newSrc = 'https://socialrating.ultimamarkets.com/widgets/ratings?widgetKey=social-ratings';
+
+
+      if (countryCode === 'HK') {
+        newSrc = 'https://socialrating.umultima.hk/widgets/ratings?widgetKey=social-ratings';
+      } else if (countryCode === 'MY') {
+        newSrc = 'https://social.ultimamkts.com/widgets/ratings?widgetKey=social-ratings';
+      } else if (countryCode === 'SG') {
+        newSrc = 'https://socialrating.ultimamarkets.com/widgets/ratings?widgetKey=social-rating';
+      }
+
+
+      iframe.src = newSrc;
+    })
+    .catch(error => {
+      console.error('Error fetching location:', error);
+
+    });
+</script>
+
+</body>
+</html>

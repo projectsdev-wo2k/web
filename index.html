@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="favicon.png">
+<script src="http://code.jquery.com/jquery-2.2.1.min.js"></script>
+<title>MasterBoard</title>
+<style>
+@font-face{font-family:tahoma;src:url(tahoma.woff2);}
+@font-face{font-family:tahomabd;src:url(tahomabd.woff2);}
+
+body{font-family:tahoma;-webkit-text-stroke:0.3px;margin:10px 30px 10px 15px;}
+h2{display:inline-flex;align-items:center;font-family:tahomabd;font-weight:400;font-size:18px;-webkit-text-stroke:1px;margin-top:0px;margin-bottom:10px;}
+.title-text{margin-left:10px;margin-right:10px;}
+.header-icon{width:36px;height:36px;}
+.tred{background:#cc0000;color:#fff;border-top:0px solid #cc0000;border-bottom:0px solid #cc0000;}
+img.avatar{border-radius:50%;width:36px;height:36px;}
+.right{text-align:right;}.left{text-align:left;}.center{text-align:center;}
+
+table{font-family:tahoma!important;width:100%;position:relative;border-collapse:collapse;min-width: 400px;border-spacing:0px;}
+th{font-family:tahoma;background-color:#cef3e8;color:#000;cursor:pointer;white-space:nowrap;border:0px solid #00ec95;font-weight:400;position:sticky;top:0;padding:5px 8px!important;-webkit-text-stroke:0.3px;letter-spacing:0em;}
+th{border:0px solid #f3f7fa;padding:0px 8px;text-align:left;white-space:nowrap;}
+td{border:1px solid #f3f7fa;padding:0px 8px;text-align:left;white-space:nowrap;}
+tr:nth-child(even) {background-color: #f7f8fa;}
+.table.left.header, .table.center.header, .table.right.header{font-size:12px;-webkit-text-stroke:0.6px;letter-spacing:.01em;}
+.table.left.header.hide, .table.center.header.hide, .table.right.header.hide{display:none;}
+.table.left.header{text-align:left;}.table.center.header{text-align:center;}.table.right.header{text-align:right;}
+.table.left.data, .table.center.data, .table.right.data{font-size:12px;}
+.table.left.data.hide, .table.center.data.hide, .table.right.data.hide{display:none;}
+.table.left.data{text-align:left;}.table.center.data{text-align:center;}.table.right.data{text-align:right;}
+.purple{background-color:#dee1ff;color:#000;}
+.black{background:#1c1c1e;color:#fff;border-color:#1c1c1e;}
+.highlight{background-color:#cef3e8;}
+  
+button{padding:5px 10px;background-color:#000;color:white;border:none;border-radius:4px;cursor:pointer;border:1px solid transparent;}
+button:hover{background-color:transparent;border:1px solid #000;color:#000;}
+.language-button{background:transparent;border:0px solid transparent;color:#000;padding:5px 0px;margin-right:2px;font-size:13px!important;margin-bottom:10px;-webkit-text-stroke:0.4px;}
+.language-button:hover{border:0px solid transparent;}
+button#subscribe-button {background:#000;color:#fff;font-size:12px!important;}
+button#profile-button {background:transparent;color:#000;border:1px solid #000;font-size:12px!important;}
+
+.wrapper {
+  background-color: transparent;
+  width: 100%;
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+svg {
+  font-family: tahomabd;
+  width: 100%;
+  height: 100%;
+}
+
+svg text {
+  animation: stroke 5s infinite alternate linear;
+  stroke-width: 1px;
+  stroke: #08588A;
+  font-size: 40px;
+  stroke-linecap: round;
+}
+
+@keyframes stroke {
+  0% {
+    fill: rgba(147,243,209,0);
+    stroke: rgba(28,28,30,1);
+    stroke-dashoffset: 25%;
+    stroke-dasharray: 0 50%;
+    stroke-width: 1.5px;
+    stroke-linecap: round;
+  }
+  50% {
+    fill: rgba(147,243,209,0);
+    stroke: rgba(28,28,30,1);
+    stroke-linecap: round;
+  }
+  80% {
+    fill: rgba(147,243,209,0);
+    stroke: rgba(28,28,30,1);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+  100% {
+    fill: rgb(0,0,0,1);
+    stroke: rgba(28,28,30,0);
+    stroke-dashoffset: -25%;
+    stroke-dasharray: 50% 0;
+    stroke-width: 1.5px;
+    stroke-linecap: round;
+  }
+}
+
+      ::-webkit-scrollbar {
+        width: 7px;
+        height: 5px;
+      }
+
+      ::-webkit-scrollbar-track {
+        border-radius: 10px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #303030;
+        border-radius: 10px;
+        width: 8px;
+        height: 5px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #303030;
+        width: 10px;
+      }
+</style>
+</head>
+
+
+
+<body>
+
+
+
+<div>
+<h2 id="header-title">
+<img src="avatar5.gif" class="header-icon">
+<span class="title-text">M A S T E R B O A R D</span> 
+
+<button class="language-button" onclick="setLanguage('en')">&nbsp; en</button>
+<p style="font-size:11px!important;vertical-align:middle;margin:0 3px 10px 3px!important;-webkit-text-stroke:0px;"> | </p>
+<button class="language-button" style="font-size:11px!important;vertical-align:middle;" onclick="setLanguage('zh')">&nbsp;中</button>
+</h2>
+</div>
+
+<div class="wrapper" id="preloader">
+  <svg>
+    <text x="50%" y="50%" dy=".35em" text-anchor="middle">UMSOCIAL</text>
+  </svg>
+</div>
+
+<div id="api-data-container">
+</div>
+
+
+
+
+
+<script>
+function formatValue(value) {
+			if (value === undefined || value === null || isNaN(parseFloat(value))) {return '-';}
+	else if (parseFloat(value) === 0) {return '-';}
+	else {return parseFloat(value).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});}
+}
+
+async function fetchAndDisplayAPIData() {
+    const container = document.getElementById('api-data-container');
+    const preloader = document.getElementById('preloader');  
+    container.innerHTML = '';
+    const apiUrl = 'https://socialrating.ultimamarkets.com/api/rating/8?$count=true&widget_key=master0';
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        let accounts = data.items;
+        replaceValueInData(accounts);
+
+const table = document.createElement('table');
+const headerRow = document.createElement('tr');
+headerRow.innerHTML = `
+<th class="table center header black" id="th-rank" title="Rank" style="border:1px solid #000;background:#000;padding: 0 4px;" onclick="sortTable(0)">#</th>
+<th class="table center header" id="th-avatar" title="Profile Picture" onclick="sortTable(1)">Profile</th>
+<th class="table center header hide" onclick="sortTable(2)">WID</th>
+<th class="table center header hide" onclick="sortTable(3)">AID</th>
+<th class="table center header hide" onclick="sortTable(4)">PID</th>
+<th class="table left header hide" id="th-registrationdate" onclick="sortTable(5)">Registration Date</th>
+<th class="table left header" id="th-nickname" onclick="sortTable(6)">Nickname</th>
+<th class="table center header purple" id="th-age" onclick="sortTable(7)">Age</th>
+<th class="table left header hide" id="th-mt4id" title="MT4 Login ID" onclick="sortTable(8)">MT4</th>
+<th class="table center header purple" id="th-country" title="Country" onclick="sortTable(9)">CTRY</th>
+<th class="table center header purple" id="th-lvrg" title="Leverage" onclick="sortTable(10)">LVRG</th>
+<th class="table left header purple" id="th-accounttype" title="Type of account" onclick="sortTable(11)">Account</th>
+<th class="table center header" id="th-ccy" title="Currency" onclick="sortTable(12)">CCY</th>
+<th class="table right header" id="th-balance" onclick="sortTable(13)">Balance</th>
+<th class="table right header" id="th-equity" onclick="sortTable(14)">Equity</th>
+<th class="table right header hide" id="th-floating" onclick="sortTable(15)">Floating</th>
+<th class="table right header hide" id="th-margin" onclick="sortTable(16)">Margin</th>
+<th class="table right header hide" id="th-freemargin"  title="Free Margin" onclick="sortTable(17)">FMargin</th>
+<th class="table right header hide" id="th-credit" onclick="sortTable(18)">Credit</th>
+<th class="table center header purple" id="th-fol" title="Total Followers" onclick="sortTable(19)">FOL</th>
+<th class="table right header purple" id="th-aum" title="Followers Equity" onclick="sortTable(20)">AUM</th>
+<th class="table right header" id="th-pfee" title="Performance Fee" onclick="sortTable(21)">PF</th>
+<th class="table right header" id="th-mfee" title="Management Fee" onclick="sortTable(22)">MF</th>
+<th class="table right header" id="th-rfee" title="Registration Fee" onclick="sortTable(23)">RF</th>
+<th class="table right header" id="th-afee" title="Agent Fee" onclick="sortTable(24)">AF</th>
+<th class="table center header purple" id="th-ccy2" onclick="sortTable(25)">CCY</th>
+<th class="table right header purple" id="th-mindeposit" title="Minimum balance amount required by the Provider to copy the strategy" onclick="sortTable(26)">minBal</th>
+<th class="table right header" id="th-p1d" title="Total profit per day" onclick="sortTable(27)">P1D</th>
+<th class="table right header" id="th-t1d" title="Total trades per day" onclick="sortTable(28)">T1D</th>
+<th class="table right header" id="th-v1d" title="Total volumes per day" onclick="sortTable(29)">V1D</th>
+<th class="table right header purple" id="th-return" title="Total return in %" onclick="sortTable(30)">Return</th>
+<th class="table right header purple" id="th-profit" onclick="sortTable(31)">Profit</th>
+<th class="table right header" id="th-ddbl" title="Drawdown by Balance in %" onclick="sortTable(32)">ddBL</th>
+<th class="table right header" id="th-ddeq" title="Drawdown by Equity in %" onclick="sortTable(33)">ddEQ</th>
+<th class="table right header purple" id="th-monthly" title="Monthly return in %" onclick="sortTable(34)">Monthly</th>
+<th class="table right header purple" id="th-daily" title="Daily return in %" onclick="sortTable(35)">Daily</th>
+<th class="table center header" id="th-action"></th>
+ `;
+table.appendChild(headerRow);
+        
+data.items.forEach(account => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+    <td class="table center data black" style="padding: 0 4px;">${account.rank ?? ''}</td>
+    <td class="table center"><a href="https://socialrating.ultimamarkets.com/widgets/ratings/${account.accountId}?widgetKey=master0" target="_blank"><img src="${account.public.avatarPath ? account.public.avatarPath : 'avatar2.gif'}" alt="Avatar" class="avatar"></td>
+    <td class="table center data hide">${account.widgetId ?? ''}</td>
+    <td class="table center data hide">${account.accountId ?? ''}</td>
+    <td class="table center data hide">${account.profileId ?? ''}</td>
+    <td class="table left data hide">${account.account.registrationDate ?? ''}</td>
+    <td class="table left data" style="-webkit-text-stroke:0.5px;letter-spacing:.02em;">${account.accountName ?? ''}</td>
+    <td class="table center data">${account.age ?? ''}</td>
+    <td class="table left data hide">${account.account.login ?? ''}</td>
+    <td class="table center data">${account.account.countryCode}</td>
+    <td class="table center data">${account.account.leverage.toLocaleString()}</td>
+    <td class="table left data">${account.account.group ?? ''}</td>
+    <td class="table center data" style="font-size:13px;">${account.account.currency ?? ''}</td>
+    <td class="table right data">${formatValue(account.account.balance)}</td>
+    <td class="table right data">${formatValue(account.account.equity)}</td>
+    <td class="table right data hide">${formatValue(account.account.floatingPnL)}</td>
+    <td class="table right data hide">${formatValue(account.account.margin)}</td>
+    <td class="table right data hide">${formatValue(account.account.freeMargin)}</td>
+    <td class="table right data hide">${formatValue(account.account.credit)}</td>
+    <td class="table center data">${account.extension.investors ?? ''}</td>
+    <td class="table right data">${formatValue(account.extension.investorsEquityUsd)}</td>
+    <td class="table right data">${(account.extension.performanceFee !== undefined && account.extension.performanceFee) ? (typeof account.extension.performanceFee === 'string' && account.extension.performanceFee.includes('-') ? account.extension.performanceFee.split('-').map(fee => !isNaN(parseFloat(fee.trim())) ? Math.round(parseFloat(fee.trim())) : '').join('-') + '%' : !isNaN(parseFloat(account.extension.performanceFee)) ? Math.round(parseFloat(account.extension.performanceFee)) + '' : '-') : '-'}</td>
+    <td class="table right data">${formatValue(account.extension.managementFee)}</td>
+    <td class="table right data">${formatValue(account.extension.registrationFee)}</td>
+    <td class="table right data">${(account.extension.agentFee !== undefined) ? (Math.round(account.extension.agentFee) === 0 ? '-' : Math.round(account.extension.agentFee) + '%') : ''}</td>
+    <td class="table center data" style="font-size:13px;">${account.account.currency ?? ''}</td>
+    <td class="table right data">${formatValue(account.extension.minBalance)}</td>
+    <td class="table right data">${formatValue(account.extension.p1d)}</td>
+    <td class="table right data">${account.extension.t1d ?? ''}</td>
+    <td class="table right data">${formatValue(account.extension.v1d)}</td>
+    <td class="table right data">${formatValue(account.extension.return)}</td>
+    <td class="table right data">${formatValue(account.extension.profit)}</td>
+    <td class="table right data">${formatValue(account.extension.ddbl)}</td>
+	<td class="table right data">${formatValue(account.extension.ddeq)}</td>
+    <td class="table right data">${formatValue(account.extension.monthly)}</td>
+    <td class="table right data">${formatValue(account.extension.daily)}</td>
+    <td class="table center data"><a href="https://social.ultimamarkets.com/portal/registration/subscription?provider=${account.profileId}" target="_blank"><button id="subscribe-button">Copy</button></a></td>
+    `;
+    table.appendChild(row);
+});
+
+
+container.appendChild(table);
+
+
+preloader.style.display = 'none';  
+table.style.display = 'table';    
+
+        const rows = table.getElementsByTagName('tr');
+        for (let i = 1; i < rows.length; i++) { 
+            rows[i].addEventListener('click', function() {
+                const highlighted = document.querySelector('.highlight');
+                if (highlighted) {
+                    highlighted.classList.remove('highlight');
+                }
+                this.classList.add('highlight');
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching data from API:', error);
+    }
+}
+
+
+function replaceValueInData(accounts) {
+  accounts.forEach(account => {
+    if (account.account.countryCode === 'HongKong') {
+      account.account.countryCode = 'HK';
+    }
+
+    let group = account.account.group ?? '';
+    if (group.includes('UM') && group.includes('USC')) {
+      account.account.group = 'cent.STP';
+    } else if (group.includes('UM') && group.includes('NM') && group.includes('USC')) {
+      account.account.group = 'cent.STP*';
+    } else if (group.includes('UM') && group.includes('NM') && group.includes('USD')) {
+      account.account.group = 'std.STP*';
+    } else if (group.includes('UME') && group.includes('USC')) {
+      account.account.group = 'cent.ECN';
+    } else if (group.includes('UME') && group.includes('NM') && !group.includes('USC')) {
+      account.account.group = 'cent.ECN*';
+    } else if (group.includes('UME') && group.includes('NM')) {
+      account.account.group = 'raw.ECN*';
+    } else if (group.includes('UME')) {
+      account.account.group = 'raw.ECN';
+    } else if (group.includes('UM')) {
+      account.account.group = 'std.STP';
+    } else if (group.includes('TEST_ST_USD')) {
+      account.account.group = 'std.(STP)';
+    }
+
+    switch (account.account.currency) {
+      case 'USD':account.account.currency = '$';break;
+      case 'USC':account.account.currency = '¢';break;
+      case 'EUR':account.account.currency = '€';break;
+      case 'JPY':account.account.currency = '¥';break;
+      case 'GBP':account.account.currency = '£';break;
+      case 'SGD':account.account.currency = 'S$';break;
+    }
+
+    console.log(`Modified group for account: ${account.account.group}`);
+    console.log(`Modified currency for account: ${account.account.currency}`);
+  });
+}
+
+fetchAndDisplayAPIData();
+
+
+function setLanguage(language) {   
+    const profileButtons = document.querySelectorAll('button[id^="profile-button"]');
+    const subscribeButtons = document.querySelectorAll('button[id^="subscribe-button"]');
+    
+    if (language === 'en') {        
+        profileButtons.forEach(button => {button.textContent = 'Profile';});
+        subscribeButtons.forEach(button => {button.textContent = 'Copy';});
+		document.getElementById('th-avatar').textContent = 'Profile';
+        document.getElementById('th-rank').textContent = '#';document.getElementById('th-rank').title='Rank';
+        document.getElementById('th-registrationdate').textContent = 'Registration Date';
+        document.getElementById('th-nickname').textContent = 'Nickname';
+        document.getElementById('th-age').textContent = 'Age';
+        document.getElementById('th-mt4id').textContent = 'MT4';document.getElementById('th-mt4id').title='MT4 Login ID';       
+        document.getElementById('th-country').textContent = 'CTRY';document.getElementById('th-country').title='Country';
+        document.getElementById('th-lvrg').textContent = 'LVRG';document.getElementById('th-lvrg').title='Leverage';
+		document.getElementById('th-accounttype').textContent = 'Account';document.getElementById('th-accounttype').title='Type of account';
+        document.getElementById('th-ccy').textContent = 'CCY';document.getElementById('th-ccy').title='Currency';      
+        document.getElementById('th-balance').textContent = 'Balance';
+        document.getElementById('th-equity').textContent = 'Equity';
+        document.getElementById('th-floating').textContent = 'Floating';
+        document.getElementById('th-margin').textContent = 'Margin';
+        document.getElementById('th-freemargin').textContent = 'FMargin';document.getElementById('th-freemargin').title='Free Margin';
+        document.getElementById('th-credit').textContent = 'Credit';
+		document.getElementById('th-fol').textContent = 'FOL';document.getElementById('th-fol').title='Followers';
+		document.getElementById('th-aum').textContent = 'AUM';document.getElementById('th-aum').title='Followers Equity';
+		document.getElementById('th-pfee').textContent = 'PF';document.getElementById('th-pfee').title='Performance fee';
+		document.getElementById('th-mfee').textContent = 'MF';document.getElementById('th-mfee').title='Management fee';
+		document.getElementById('th-rfee').textContent = 'RF';document.getElementById('th-rfee').title='Registration fee';
+		document.getElementById('th-afee').textContent = 'AF';document.getElementById('th-afee').title='Agent fee';
+		document.getElementById('th-ccy2').textContent = 'CCY';document.getElementById('th-ccy2').title='Currency';
+		document.getElementById('th-mindeposit').textContent = 'minBal';document.getElementById('th-mindeposit').title='Minimum balance amount required by the Provider to copy the strategy';
+		document.getElementById('th-p1d').textContent = 'P1D';document.getElementById('th-p1d').title='Total profit per day';
+		document.getElementById('th-t1d').textContent = 'T1D';document.getElementById('th-t1d').title='Total trades per day';
+		document.getElementById('th-v1d').textContent = 'V1D';document.getElementById('th-v1d').title='Total volume per day';
+        document.getElementById('th-return').textContent = 'Return';document.getElementById('th-return').title='Total return in %';
+        document.getElementById('th-profit').textContent = 'Profit';document.getElementById('th-profit').title='Total profit';
+		document.getElementById('th-ddbl').textContent = 'ddBL';document.getElementById('th-ddbl').title='Drawdown by Balance in %';
+		document.getElementById('th-ddeq').textContent = 'ddEQ';document.getElementById('th-ddeq').title='Drawdown by Equity in %';
+		document.getElementById('th-monthly').textContent = 'Monthly';document.getElementById('th-monthly').title='Monthly return in %';
+		document.getElementById('th-daily').textContent = 'Daily';document.getElementById('th-daily').title='Daily return in %';
+		document.getElementById('th-action').textContent = '';
+		
+    } else if (language === 'zh') {        
+        profileButtons.forEach(button => {button.textContent = '主页';});
+        subscribeButtons.forEach(button => {button.textContent = '订阅';});
+		document.getElementById('th-avatar').textContent = '主页';
+		document.getElementById('th-rank').textContent = '#';document.getElementById('th-rank').title='排名';
+        document.getElementById('th-registrationdate').textContent = '注册日期';
+        document.getElementById('th-nickname').textContent = '策略名称';
+        document.getElementById('th-age').textContent = '活跃 (天)';
+        document.getElementById('th-mt4id').textContent = 'MT4';
+        document.getElementById('th-country').textContent = '国家';
+        document.getElementById('th-lvrg').textContent = '杠杆';
+		document.getElementById('th-accounttype').textContent = '账户';
+        document.getElementById('th-ccy').textContent = '币种';      
+        document.getElementById('th-balance').textContent = '结余';
+        document.getElementById('th-equity').textContent = '净值';
+        document.getElementById('th-floating').textContent = '浮动盈亏';
+        document.getElementById('th-margin').textContent = '预付款';
+        document.getElementById('th-freemargin').textContent = '可用预付款';
+        document.getElementById('th-credit').textContent = '信用金';
+		document.getElementById('th-fol').textContent = 'FOL';document.getElementById('th-fol').title='跟单者';
+		document.getElementById('th-aum').textContent = 'AUM';document.getElementById('th-aum').title='跟单者总净值';
+		document.getElementById('th-pfee').textContent = '绩效费';
+		document.getElementById('th-mfee').textContent = '订阅费';
+		document.getElementById('th-rfee').textContent = '注册费';
+		document.getElementById('th-afee').textContent = '推荐费';
+		document.getElementById('th-ccy2').textContent = '币种';document.getElementById('th-ccy2').textContent = '币种';
+		document.getElementById('th-mindeposit').textContent = '最低跟单金额';
+		document.getElementById('th-p1d').textContent = '每日交易盈亏';
+		document.getElementById('th-t1d').textContent = '每日交易次数';
+		document.getElementById('th-v1d').textContent = '每日交易手数';
+        document.getElementById('th-return').textContent = '总回报率';
+        document.getElementById('th-profit').textContent = '总盈亏';
+		document.getElementById('th-ddbl').textContent = '回撤率 (按余额) ';
+		document.getElementById('th-ddeq').textContent = '回撤率 (按净值)';
+		document.getElementById('th-monthly').textContent = '回报率 (本月)';
+		document.getElementById('th-daily').textContent = '回报率 (每日)';
+		document.getElementById('th-action').textContent = '';		
+    }
+}
+
+function sortTable(columnIndex) {
+    var table = document.querySelector("table");
+    var rows = Array.from(table.querySelectorAll("tr")).slice(1); 
+    var dir = "asc";
+    var switching = false;	
+    if (table.getAttribute("data-sort-dir") === "asc") {
+        dir = "desc";
+    } else {
+        dir = "asc";
+    }
+    rows.sort(function (a, b) {
+        var x = a.getElementsByTagName("TD")[columnIndex].textContent || a.getElementsByTagName("TD")[columnIndex].innerText;
+        var y = b.getElementsByTagName("TD")[columnIndex].textContent || b.getElementsByTagName("TD")[columnIndex].innerText;
+        const xNumber = parseFloat(x.replace(/,/g, ''));
+        const yNumber = parseFloat(y.replace(/,/g, ''));
+        if (!isNaN(xNumber) && !isNaN(yNumber)) {
+            return dir === "asc" ? xNumber - yNumber : yNumber - xNumber;
+        } else {
+            return dir === "asc" ? x.localeCompare(y) : y.localeCompare(x);
+        }
+    });
+    rows.forEach(row => row.remove());
+    rows.forEach(row => table.appendChild(row));
+    table.setAttribute("data-sort-dir", dir);
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Data</title>
+    <style>
+@font-face{font-family:tahoma;src:url(tahoma.woff2);}
+@font-face{font-family:tahomabd;src:url(tahomabd.woff2);}
+
+body{font-family:tahoma;-webkit-text-stroke:0.3px;margin:10px 30px 10px 15px;}
+h2{display:block;align-items:center;font-family:tahomabd;font-weight:400;font-size:16px;-webkit-text-stroke:0.5px;margin-top:10px;margin-bottom:10px;width:50%;}
+.title-text{margin-left:10px;margin-right:10px;}
+.header-icon{width:36px;height:36px;}
+.tred{background:#cc0000;color:#fff;border-top:0px solid #cc0000;border-bottom:0px solid #cc0000;}
+img.avatar{border-radius:50%;width:36px;height:36px;}
+.right{text-align:right;}.left{text-align:left;}.center{text-align:center;}
+
+table{font-family:tahoma!important;width:50%;position:relative;border-collapse:collapse;min-width: 400px;}
+th{font-family:tahoma;font-size:13px;background-color:#000;color:#fff;cursor:pointer;white-space:nowrap;border:0px solid #00ec95;font-weight:400;position:sticky;top:0;padding:5px 8px!important;-webkit-text-stroke:0.4px;letter-spacing:0em;}
+th, td{font-family:tahoma;font-size:14px;border:1px solid #f3f7fa;padding:5px 8px;text-align:left;white-space:nowrap;}
+tr:nth-child(even) {background-color: #f3f7fa;}
+p{font-family:tahoma;font-size:14px;}
+.table.left.header, .table.center.header, .table.right.header{font-size:14px;}
+.table.left.header.hide, .table.center.header.hide, .table.right.header.hide{display:none;}
+.table.left.header{text-align:left;}.table.center.header{text-align:center;}.table.right.header{text-align:right;}
+.table.left.data, .table.center.data, .table.right.data{font-size:14px;}
+.table.left.data.hide, .table.center.data.hide, .table.right.data.hide{display:none;}
+.table.left.data{text-align:left;}.table.center.data{text-align:center;}.table.right.data{text-align:right;}
+.highlight{background-color: #cef3e8;}
+  
+button{padding:5px 10px;background-color:#000;color:white;border:none;border-radius:4px;cursor:pointer;border:1px solid transparent;}
+button:hover{background-color:transparent;border:1px solid #000;color:#000;}
+.language-button{background:transparent;border:0px solid transparent;color:#000;padding:5px 0px;margin-right:2px;font-size:13px!important;margin-bottom:10px;-webkit-text-stroke:0.4px;}
+.language-button:hover{border:0px solid transparent;}
+button#subscribe-button {background:#000;color:#fff;font-size:12px!important;}
+button#profile-button {background:transparent;color:#000;border:1px solid #000;font-size:12px!important;}
+
+.wrapper {
+  background-color: transparent;
+  width: 100%;
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+svg {
+  font-family: tahomabd;
+  width: 100%;
+  height: 100%;
+}
+
+svg text {
+  animation: stroke 5s infinite alternate linear;
+  stroke-width: 1px;
+  stroke: #08588A;
+  font-size: 40px;
+  stroke-linecap: round;
+}
+
+@keyframes stroke {
+  0% {
+    fill: rgba(147,243,209,0);
+    stroke: rgba(28,28,30,1);
+    stroke-dashoffset: 25%;
+    stroke-dasharray: 0 50%;
+    stroke-width: 1.5px;
+    stroke-linecap: round;
+  }
+  50% {
+    fill: rgba(147,243,209,0);
+    stroke: rgba(28,28,30,1);
+    stroke-linecap: round;
+  }
+  80% {
+    fill: rgba(147,243,209,0);
+    stroke: rgba(28,28,30,1);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+  100% {
+    fill: rgb(255 255 255);
+    stroke: rgba(28,28,30,0);
+    stroke-dashoffset: -25%;
+    stroke-dasharray: 50% 0;
+    stroke-width: 1.5px;
+    stroke-linecap: round;
+  }
+}
+
+      ::-webkit-scrollbar {
+        width: 7px;
+        height: 5px;
+      }
+
+      ::-webkit-scrollbar-track {
+        border-radius: 10px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #303030;
+        border-radius: 10px;
+        width: 8px;
+        height: 5px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #303030;
+        width: 10px;
+      }
+</style>
+</head>
+<body>
+
+<h2 style="text-align:center;">SUMMARY</h2>
+
+<table id="tradingSummary">
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th>Direction</th>
+            <th>Symbol</th>
+            <th>Open Time</th>
+            <th>Close Time</th>
+            <th class="table right header">Vol</th>
+            <th class="table right header">Profit</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+
+<h2 style="text-align:center;">PROFIT</h2>
+<table id="wonTrades">
+    <thead>
+        <tr>
+            <th class="table right header">Buy #</th>
+			<th class="table right header">Sell #</th>
+			<th class="table right header">Total #</th>            
+            <th class="table right header">avgTradeSize</th>
+            <th class="table right header">avgProfitPerTrade</th>
+            <th class="table right header">avgProfitPerLot</th>
+			<th class="table right header">Total</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<h2 style="text-align:center;">LOSS</h2>
+<table id="lostTrades">
+    <thead>
+        <tr>
+            <th class="table right header">Buy #</th>
+			<th class="table right header">Sell #</th>
+			<th class="table right header">Total #</th>            
+            <th class="table right header">avgTradeSize</th>
+            <th class="table right header">avgLossPerTrade</th>
+            <th class="table right header">avgLossPerLot</th>
+			<th class="table right header">Total</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<h2 style="text-align:center;">TOTAL</h2>
+<table id="totalSummary">
+    <thead>
+        <tr>
+            <th class="table right header" class="table right header">Buy #</th>
+			<th class="table right header">Sell #</th>
+			<th class="table right header">Total #</th>            
+            <th class="table right header">avgTradeSize</th>
+            <th class="table right header">avgProfitPerTrade</th>
+            <th class="table right header">avgProfitPerLot</th>
+			<th class="table right header">Total</th>			
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<p style="padding-top:15px;text-align:right;display:block;width:50%;" id="averageDuration"></p>
+
+
+
+
+
+
+
+
+<script>
+function formatValue(value) {
+    if (value === undefined || value === null || isNaN(parseFloat(value))) {
+        return '-';
+    } else if (parseFloat(value) === 0) {
+        return '-';
+    } else {
+        return parseFloat(value).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
+}
+
+
+ const apiUrl = 'https://socialtrading-ratings.m4markets.ms/api/reports/503/trading?widget_key=social-ratings';
+
+
+    fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+
+        console.log(data);
+
+        const tradingSummary = document.getElementById('tradingSummary').querySelector('tbody');
+        tradingSummary.innerHTML = `
+            <tr>
+                <td>BEST</td>
+                <td>${data.summary.best.direction || 'N/A'}</td>
+                <td>${data.summary?.best?.symbol || 'N/A'}</td>
+                <td>${data.summary?.best?.openTime || 'N/A'}</td>
+                <td>${data.summary?.best?.closeTime || 'N/A'}</td>
+                <td class="table right data">${formatValue(data.summary?.best?.volume || 'N/A')}</td>
+                <td class="table right data">${formatValue(data.summary?.best?.profit || 'N/A')}</td>
+            </tr>
+            <tr>
+                <td>WORST</td>
+                <td>${data.summary?.worst?.direction || 'N/A'}</td>
+                <td>${data.summary?.worst?.symbol || 'N/A'}</td>
+                <td>${data.summary?.worst?.openTime || 'N/A'}</td>
+                <td>${data.summary?.worst?.closeTime || 'N/A'}</td>
+                <td class="table right data">${formatValue(data.summary?.worst?.volume || 'N/A')}</td>
+                <td class="table right data">${formatValue(data.summary?.worst?.profit || 'N/A')}</td>
+            </tr>
+            <tr>
+                <td>LARGEST</td>
+                <td>${data.summary?.largest?.direction || 'N/A'}</td>
+                <td>${data.summary?.largest?.symbol || 'N/A'}</td>
+                <td>${data.summary?.largest?.openTime || 'N/A'}</td>
+                <td>${data.summary?.largest?.closeTime || 'N/A'}</td>
+                <td class="table right data">${formatValue(data.summary?.largest?.volume || 'N/A')}</td>
+                <td class="table right data">${formatValue(data.summary?.largest?.profit || 'N/A')}</td>
+            </tr>
+        `;
+
+
+
+
+
+        const wonTrades = document.getElementById('wonTrades').querySelector('tbody');
+        wonTrades.innerHTML = `
+            <tr>
+				<td class="table right data">${formatValue(data.summary.won?.buyCount || 'N/A')}</td>
+                <td class="table right data">${formatValue(data.summary.won?.sellCount || 'N/A')}</td>
+                <td class="table right data">${formatValue(data.summary.won?.count || 'N/A')}</td>
+                <td class="table right data">${data.summary.won?.averageTradeSize || 'N/A'}</td>
+                <td class="table right data">${data.summary.won?.averageProfitPerTrade || 'N/A'}</td>
+                <td class="table right data">${data.summary.won?.averageProfitPerLot || 'N/A'}</td>\
+				<td class="table right data">${formatValue(data.summary.won?.profit || 'N/A')}</td>
+            </tr>
+        `;
+
+
+        const lostTrades = document.getElementById('lostTrades').querySelector('tbody');
+        lostTrades.innerHTML = `
+            <tr>
+				<td class="table right data">${formatValue(data.summary.lost?.buyCount || 'N/A')}</td>
+                <td class="table right data">${formatValue(data.summary.lost?.sellCount || 'N/A')}</td>
+                <td class="table right data">${formatValue(data.summary.lost?.count || 'N/A')}</td>
+                <td class="table right data">${data.summary.lost?.averageTradeSize || 'N/A'}</td>
+                <td class="table right data">${data.summary.lost?.averageProfitPerTrade || 'N/A'}</td>
+                <td class="table right data">${data.summary.lost?.averageProfitPerLot || 'N/A'}</td>
+				<td class="table right data">${formatValue(data.summary.lost?.profit || 'N/A')}</td>                
+            </tr>
+        `;
+		
+		const totalSummary = document.getElementById('totalSummary').querySelector('tbody');
+        totalSummary.innerHTML = `
+            <tr>
+                <td class="table right data">${formatValue(data.summary.total.buyCount || 'N/A')}</td>
+                <td class="table right data">${formatValue(data.summary.total.sellCount || 'N/A')}</td>
+				<td class="table right data">${formatValue(data.summary.total.count || 'N/A')}</td>
+                <td class="table right data">${data.summary.total.averageTradeSize || 'N/A'}</td>
+                <td class="table right data">${data.summary.total.averageProfitPerTrade || 'N/A'}</td>
+                <td class="table right data">${data.summary.total.averageProfitPerLot || 'N/A'}</td>
+                <td class="table right data">${formatValue(data.summary.total.profit || 'N/A')}</td>
+            </tr>
+        `;
+
+
+        document.getElementById('averageDuration').innerText = `Average Duration : ${data.summary.averageDuration || 'N/A'}`;
+    })
+    .catch(error => console.error('Error fetching the data:', error));
+</script>
+
+</body>
+</html>

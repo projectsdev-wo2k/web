@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MasterBoard</title>
+<style>
+@font-face{font-family:tahoma;src:url(tahoma.woff2);}
+@font-face{font-family:tahomabd;src:url(tahomabd.woff2);}
+
+body{font-family:tahoma;-webkit-text-stroke:0.3px;margin:10px 30px;}
+h2{font-family:tahomabd;font-weight:400;font-size:24px;-webkit-text-stroke:1px;margin-top:10px;}
+.tred{background:#cc0000;color:#fff;border-top:0px solid #cc0000;border-bottom:0px solid #cc0000;}
+img.avatar{border-radius:50%;}
+.right{text-align:right;}.left{text-align:left;}.center{text-align:center;}
+
+table{width:100%;position:relative;border-collapse:collapse;}
+th, td{border:1px solid #f3f7f9;padding:0px 8px;text-align:left;white-space:nowrap;}
+th{background-color:#000;color:#fff;cursor:pointer;white-space:nowrap;border:0px solid #000;font-weight:400;position:sticky;top:0;padding:5px 8px!important;}
+.tableleft.header{text-align:left;}.tablecenter.header{text-align:center;}.tableright.header{text-align:right;}
+.tableleft.header, .tablecenter.header, .tableright.header{font-size:14px;}
+.tableleft.data{text-align:left;}.tablecenter.data{text-align:center;}.tableright.data{text-align:right;}
+.tableleft.data, .tablecenter.data, .tableright.data{font-size:14px;}
+  
+button{padding:5px 10px;background-color:#000;color:white;border:none;border-radius:4px;cursor:pointer;}button:hover{background-color:#45a049;}
+.language-button{background:transparent;border:0px solid #000;color:#000;padding:5px 0px;margin-right:2px;font-size:14px;}
+</style>
+<body>
+
+<h2>MasterBoard</h2>
+<div id="api-data-container"></div>
+
+<script>
+async function fetchAndDisplayAPIData() {
+const container = document.getElementById('api-data-container');
+container.innerHTML = ''; 
+const apiUrl = 'https://socialrating.ultimamarkets.com/api/rating/8?$orderby=rank%20asc&$count=true&widget_key=master0';
+try {
+const response = await fetch(apiUrl);
+const data = await response.json();
+const table = document.createElement('table');
+const headerRow = document.createElement('tr');
+headerRow.innerHTML = `
+<th class="rowtitle center" onclick="sortTable(0)">WID</th>
+<th class="rowtitle center" onclick="sortTable(1)">AID</th>
+<th class="rowtitle center" onclick="sortTable(2)">PID</th>
+<th class="rowtitle left" onclick="sortTable(11)">Registration Date</th>
+<th class="rowtitle center" onclick="sortTable(3)">Rank</th>
+<th class="rowtitle left" onclick="sortTable(4)">Nickname</th>
+<th class="rowtitle right" onclick="sortTable(5)">MT4 ID</th>
+<th class="rowtitle center" onclick="sortTable(6)">Visibility</th>
+<th class="rowtitle left" onclick="sortTable(7)">Group</th>
+<th class="rowtitle right" onclick="sortTable(9)">LVRG</th>
+<th class="rowtitle left" onclick="sortTable(10)">Country</th>
+<th class="rowtitle center" onclick="sortTable(8)">CCY</th>
+<th class="rowtitle right" onclick="sortTable(12)">Balance</th>
+<th class="rowtitle right" onclick="sortTable(13)">Equity</th>
+<th class="rowtitle right" onclick="sortTable(14)">Floating</th>
+<th class="rowtitle right" onclick="sortTable(15)">Margin</th>
+<th class="rowtitle right" onclick="sortTable(16)">freeMargin</th>
+<th class="rowtitle right" onclick="sortTable(17)">Credit</th>
+<th class="rowtitle right" onclick="sortTable(18)">Return</th>
+<th class="rowtitle right" onclick="sortTable(19)">Profit</th>
+<th class="rowtitle right" onclick="sortTable(20)">Drawdown</th>
+<th class="rowtitle right" onclick="sortTable(21)">Gain</th>
+<th class="rowtitle right" onclick="sortTable(22)">Monthly</th>
+<th class="rowtitle right" onclick="sortTable(23)">Daily</th>
+<th class="rowtitle right" onclick="sortTable(24)">initDeposit</th>
+<th class="rowtitle right" onclick="sortTable(25)">P1D</th>
+<th class="rowtitle right" onclick="sortTable(26)">Trades</th>
+<th class="rowtitle right" onclick="sortTable(27)">Volume</th>
+<th class="rowtitle right" onclick="sortTable(28)">FOL</th>
+<th class="rowtitle right" onclick="sortTable(29)">AUM</th>
+<th class="rowtitle right" onclick="sortTable(30)">PF</th>
+<th class="rowtitle right" onclick="sortTable(31)">MF</th>
+<th class="rowtitle right" onclick="sortTable(32)">minBal</th>
+<th class="rowtitle right" onclick="sortTable(33)">RF</th>
+<th class="rowtitle right" onclick="sortTable(34)">absGain</th>
+<th class="rowtitle right" onclick="sortTable(35)">Sharpe</th>
+<th class="rowtitle right" onclick="sortTable(36)">maxDD</th>
+<th class="rowtitle right" onclick="sortTable(37)">mDailyProfit</th>
+<th class="rowtitle right" onclick="sortTable(38)">mDailyLoss</th>
+<th class="rowtitle right" onclick="sortTable(39)">avgDailyProfit</th>
+<th class="rowtitle right" onclick="sortTable(40)">avgDailyLoss</th>
+<th class="rowtitle right" onclick="sortTable(41)">DRV</th>
+<th class="rowtitle right" onclick="sortTable(42)">RV</th>
+<th class="rowtitle right" onclick="sortTable(43)">GDM</th>
+<th class="rowtitle right" onclick="sortTable(44)">GWM</th>
+<th class="rowtitle right" onclick="sortTable(45)">NDM</th>
+<th class="rowtitle right" onclick="sortTable(46)">Volume</th>
+<th class="rowtitle right" onclick="sortTable(47)">rAllTime</th>
+<th class="rowtitle right" onclick="sortTable(48)">rYear</th>
+<th class="rowtitle right" onclick="sortTable(49)">rHalfYear</th>
+<th class="rowtitle right" onclick="sortTable(50)">rQuarter</th>
+<th class="rowtitle right" onclick="sortTable(51)">rMonth</th>
+<th class="rowtitle right" onclick="sortTable(52)">rWeek</th>
+<th class="rowtitle right" onclick="sortTable(53)">rDay</th>
+<th class="rowtitle right" onclick="sortTable(54)">rCalMonth</th>
+<th class="rowtitle right" onclick="sortTable(55)">rPrevMonth</th>
+`;
+table.appendChild(headerRow); 
+data.items.forEach(account => {
+const row = document.createElement('tr');
+row.innerHTML = `
+<td class="rowdata center">${account.widgetId ?? ''}</td>
+<td class="rowdata center">${account.accountId ?? ''}</td>
+<td class="rowdata center">${account.profileId ?? ''}</td>
+<td class="rowdata left">${account.account.registrationDate ?? ''}</td>
+<td class="rowdata center">${account.rank ?? ''}</td>
+<td class="rowdata left">${account.accountName ?? ''}</td>
+<td class="rowdata right">${account.account.login ?? ''}</td>
+<td class="rowdata center">${account.account.isPublic ?? ''}</td>
+<td class="rowdata left">${account.account.group ?? ''}</td>
+<td class="rowdata right">${account.account.leverage.toLocaleString()}</td>
+<td class="rowdata left">${account.account.country ?? ''}</td>
+<td class="rowdata center">${account.account.currency ?? ''}</td>
+<td class="rowdata right">${(account.account.balance !== undefined) ? account.account.balance.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.account.equity !== undefined) ? account.account.equity.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.account.floatingPnL !== undefined) ? account.account.floatingPnL.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.account.margin !== undefined) ? account.account.margin.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.account.freeMargin !== undefined) ? account.account.freeMargin.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.account.credit !== undefined) ? account.account.credit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.extension.return !== undefined) ? account.extension.return.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.extension.profit !== undefined) ? account.extension.profit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.extension.drawdown !== undefined) ? account.extension.drawdown.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.extension.gain !== undefined) ? account.extension.gain.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.extension.monthly !== undefined) ? account.extension.monthly.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.extension.daily !== undefined) ? account.extension.daily.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.extension.initDeposit !== undefined) ? account.extension.initDeposit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.extension.P1D !== undefined) ? account.extension.P1D.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.extension.Trades !== undefined) ? account.extension.Trades.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.extension.volume !== undefined) ? account.extension.volume.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${account.extension.investors ?? ''}</td>
+<td class="rowdata right">${(account.extension.investorsEquity !== undefined) ? account.extension.investorsEquity.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.extension.performanceFee !== undefined) ? account.extension.performanceFee.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.extension.managementFee !== undefined) ? account.extension.managementFee.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.extension.minBalance !== undefined) ? account.extension.minBalance.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.recoveryFactor !== undefined) ? account.recoveryFactor.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.absoluteGain !== undefined) ? account.absoluteGain.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.sharpeRatio !== undefined) ? account.sharpeRatio.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.maxDrawdown !== undefined) ? account.maxDrawdown.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.maxDailyProfit !== undefined) ? account.maxDailyProfit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.maxDailyLoss !== undefined) ? account.maxDailyLoss.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.averageDailyProfit !== undefined) ? account.averageDailyProfit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.averageDailyLoss !== undefined) ? account.averageDailyLoss.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.dailyReturnVolatility !== undefined) ? account.dailyReturnVolatility.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.returnVolatility !== undefined) ? account.returnVolatility.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.grossDepositMonth !== undefined) ? account.grossDepositMonth.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.grossWithdrawalMonth !== undefined) ? account.grossWithdrawalMonth.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.netDepositMonth !== undefined) ? account.netDepositMonth.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${(account.volumeMonth !== undefined) ? account.volumeMonth.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="rowdata right">${account.returnAllTime ?? ''}</td>
+<td class="rowdata right">${account.returnYear ?? ''}</td>
+<td class="rowdata right">${account.returnHalfYear ?? ''}</td>
+<td class="rowdata right">${account.returnQuarter ?? ''}</td>
+<td class="rowdata right">${account.returnMonth ?? ''}</td>
+<td class="rowdata right">${account.returnWeek ?? ''}</td>
+<td class="rowdata right">${account.returnDay ?? ''}</td>
+<td class="rowdata right">${account.returnCalendarMonth ?? ''}</td>
+<td class="rowdata right">${account.returnPreviousMonth ?? ''}</td>
+`;
+table.appendChild(row); 
+});
+container.appendChild(table);
+} catch (error) {
+console.error('Error fetching data from API:', error);
+}
+}
+fetchAndDisplayAPIData();
+
+function sortTable(n) {
+var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+table = document.querySelector("table");
+switching = true;
+dir = "asc";
+while (switching) {
+switching = false;
+rows = table.rows;
+for (i = 1; i < (rows.length - 1); i++) {
+shouldSwitch = false;
+x = rows[i].getElementsByTagName("TD")[n];
+y = rows[i + 1].getElementsByTagName("TD")[n];
+if (dir == "asc") {
+if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+shouldSwitch = true;
+break;
+}
+} else if (dir == "desc") {
+if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+shouldSwitch = true;
+break;
+}
+}
+}
+if (shouldSwitch) {
+rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+switching = true;
+switchcount++;
+} else {
+if (switchcount == 0 && dir == "asc") {
+dir = "desc";
+switching = true;
+}
+}
+}
+}
+</script>
+
+</body>
+</html>

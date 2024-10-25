@@ -1,0 +1,47 @@
+<style>
+@font-face{font-family:tahoma;src:url(tahoma.woff2);}
+@font-face{font-family:tahomabd;src:url(tahomabd.woff2);}
+
+svg {
+	font-family: tahomabd;
+	width: 100%; height: 100%;
+}
+svg text {
+	animation: stroke 8.5s infinite ease;
+	stroke-width: 3px;
+	stroke: #08588A;
+	font-size: 69px;
+	stroke-linecap: round;
+}
+@keyframes stroke {
+	0%   {
+		fill: rgba(147,243,209,0);
+		stroke: rgba(8,88,138,1);
+		stroke-dashoffset: 25%;
+		stroke-dasharray: 0 50%;
+		stroke-width: 1px;
+		stroke-linecap: round;
+	}
+	70%  {fill: rgba(147,243,209,0);stroke: rgba(8,88,138,1);stroke-linecap: round;}
+	80%  {fill: rgba(147,243,209,0);stroke: rgba(8,88,138,1);stroke-width: 3;stroke-linecap: round;}
+	100% {
+		fill: rgb(255 255 255);
+		stroke: rgba(8,88,138,0);
+		stroke-dashoffset: -25%;
+		stroke-dasharray: 50% 0;
+		stroke-width: 3px;
+		stroke-linecap: round;
+	}
+}
+
+.wrapper {background-color: #FFFFFF};
+</style>
+
+
+<div class="wrapper">
+	<svg>
+		<text x="50%" y="50%" dy=".35em" text-anchor="middle">
+			UMSOCIAL
+		</text>
+	</svg>
+</div>

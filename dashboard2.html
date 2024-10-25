@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Responsive Account Dashboard</title>
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: tahoma, sans-serif;
+    padding: 20px;
+    background-color: #f3f7fa;
+  }
+  .dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+  .card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+  }
+  .card img {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 10px;
+  }
+  .stat {
+    font-weight: bold;
+    color: #08588A;
+  }
+  .card p {
+    margin: 5px 0;
+    font-size: 14px;
+  }
+  .card button {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+  }
+  .card button:hover {
+    background-color: transparent;
+    color: #000;
+    border: 1px solid #000;
+  }
+
+  @media (min-width: 600px) {
+    .dashboard {
+      justify-content: flex-start;
+    }
+  }
+
+</style>
+</head>
+<body>
+
+<div class="dashboard" id="dashboard-container">
+</div>
+
+<script>
+async function fetchAndDisplayAccountData() {
+    const apiUrl = 'https://socialrating.ultimamarkets.com/api/rating/8?$count=true&widget_key=master0';
+    const container = document.getElementById('dashboard-container');
+    
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        let accounts = data.items;
+        
+        // Modify group and currency values as required
+        replaceValueInData(accounts);
+
+        // Create cards for each account
+        accounts.forEach(account => {
+            const card = document.createElement('div');
+            card.classList.add('card');
+            card.innerHTML = `
+                <p><span class="stat">Rank:</span> ${account.rank ?? '-'}</p>
+                <img src="${account.public.avatarPath ? account.public.avatarPath : 'avatar2.gif'}" alt="Avatar">
+                <p><span class="stat">Nickname:</span> ${account.accountName ?? '-'}</p>
+                <p><span class="stat">Age:</span> ${account.age ?? '-'}</p>
+                <p><span class="stat">Country:</span> ${account.account.countryCode ?? '-'}</p>
+                <p><span class="stat">Account Group:</span> ${account.account.group ?? '-'}</p>
+                <p><span class="stat">Leverage:</span> ${formatValue(account.account.leverage)}</p>
+                <p><span class="stat">Currency:</span> ${account.account.currency ?? '-'}</p>
+                <p><span class="stat">Followers:</span> ${account.extension.investors ?? '-'}</p>
+                <p><span class="stat">AUM:</span> $${formatValue(account.extension.investorsEquity)}</p>
+                <p><span class="stat">Performance Fee:</span> ${account.extension.performanceFee ? account.extension.performanceFee + '%' : '-'}</p>
+                <p><span class="stat">Management Fee:</span> ${formatValue(account.extension.managementFee)}</p>
+                <p><span class="stat">Registration Fee:</span> ${formatValue(account.extension.registrationFee)}</p>
+                <p><span class="stat">Agent Fee:</span> ${account.extension.agentFee ? account.extension.agentFee + '%' : '-'}</p>
+                <p><span class="stat">Min. Deposit:</span> $${formatValue(account.extension.minBalance)}</p>
+                <p><span class="stat">Return:</span> ${formatValue(account.extension.return)}%</p>
+                <p><span class="stat">Profit:</span> $${formatValue(account.extension.profit)}</p>
+                <p><span class="stat">Max Drawdown:</span> ${formatValue(account.extension.drawdown)}%</p>
+                <button onclick="window.open('https://social.ultimamarkets.com/portal/registration/subscription?provider=${account.profileId}', '_blank')">Copy</button>
+            `;
+            container.appendChild(card);
+        });
+    } catch (error) {
+        console.error('Error fetching data from API:', error);
+    }
+}
+
+function replaceValueInData(accounts) {
+  accounts.forEach(account => {
+    // Country code change example
+    if (account.account.countryCode === 'HongKong') {
+      account.account.countryCode = 'HK';
+    }
+    // Modify account group based on your rules
+    let group = account.account.group ?? '';
+    if (group.includes('UM') && group.includes('USC')) {
+      account.account.group = 'Cent STP';
+    } else if (group.includes('UME') && group.includes('NM')) {
+      account.account.group = 'Raw ECN *';
+    } else if (group.includes('UME')) {
+      account.account.group = 'Raw ECN';
+    } else if (group.includes('UM')) {
+      account.account.group = 'Std. STP';
+    }
+
+    // Replace currency symbols
+    switch (account.account.currency) {
+      case 'USD': account.account.currency = '$'; break;
+      case 'USC': account.account.currency = '¢'; break;
+      case 'EUR': account.account.currency = '€'; break;
+      case 'JPY': account.account.currency = '¥'; break;
+      case 'GBP': account.account.currency = '£'; break;
+      case 'SGD': account.account.currency = 'S$'; break;
+    }
+  });
+}
+
+function formatValue(value) {
+    return value ? parseFloat(value).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '-';
+}
+
+fetchAndDisplayAccountData();
+</script>
+
+</body>
+</html>

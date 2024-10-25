@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="favicon.png">
+<script src="http://code.jquery.com/jquery-2.2.1.min.js"></script>
+<title>MasterBoard</title>
+<style>
+@font-face{font-family:tahoma;src:url(tahoma.woff2);}
+@font-face{font-family:tahomabd;src:url(tahomabd.woff2);}
+
+body{font-family:tahoma;-webkit-text-stroke:0.4px;margin:10px 30px 10px 15px;}
+h2{font-family:tahomabd;font-weight:400;font-size:18px;-webkit-text-stroke:1px;margin-top:20px;margin-bottom:10px;}
+.tred{background:#cc0000;color:#fff;border-top:0px solid #cc0000;border-bottom:0px solid #cc0000;}
+img.avatar{border-radius:50%;width:36px;height:36px;}
+.right{text-align:right;}.left{text-align:left;}.center{text-align:center;}
+
+table{width:100%;position:relative;border-collapse:collapse;min-width: 400px;}
+th, td{border:1px solid #f3f7f9;padding:0px 8px;text-align:left;white-space:nowrap;}
+th{background-color:#54ffc0;color:#000;cursor:pointer;white-space:nowrap;border:1px solid #54ffc0;font-weight:400;position:sticky;top:0;padding:8px 8px!important;-webkit-text-stroke:0.4px;letter-spacing:.02em;}
+.table.left.header, .table.center.header, .table.right.header{font-size:12px;}
+.table.left.header.hide, .table.center.header.hide, .table.right.header.hide{display:none;}
+.table.left.header{text-align:left;}.table.center.header{text-align:center;}.table.right.header{text-align:right;}
+.table.left.data, .table.center.data, .table.right.data{font-size:12px;}
+.table.left.data.hide, .table.center.data.hide, .table.right.data.hide{display:none;}
+.table.left.data{text-align:left;}.table.center.data{text-align:center;}.table.right.data{text-align:right;}
+.highlight{background-color: #d2fc61;}
+  
+button{padding:5px 10px;background-color:#000;color:white;border:none;border-radius:4px;cursor:pointer;border:1px solid transparent;}
+button:hover{background-color:transparent;border:1px solid #000;color:#000;}
+.language-button{background:transparent;border:0px solid transparent;color:#000;padding:5px 0px;margin-right:2px;font-size:13px!important;margin-bottom:10px;-webkit-text-stroke:0.4px;}
+.language-button:hover{border:0px solid transparent;}
+button#subscribe-button {background:#000;color:#fff;font-size:12px!important;}
+button#profile-button {background:#000;color:#fff;font-size:12px!important;}
+</style>
+</head>
+
+<body>
+<div>
+<h2 id="header-title">M A S T E R B O A R D</h2>
+<button class="language-button" onclick="setLanguage('en')">EN</button>
+<button class="language-button" onclick="setLanguage('zh')">| &nbsp;中</button>
+</div>
+
+<div id="api-data-container">
+</div>
+
+
+<script>
+async function fetchAndDisplayAPIData() {
+    const container = document.getElementById('api-data-container');
+    container.innerHTML = '';
+    const apiUrl = 'https://socialrating.ultimamarkets.com/api/rating/8?$count=true&widget_key=master0';
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        let accounts = data.items;
+        replaceValueInData(accounts);
+
+        const table = document.createElement('table');
+        const headerRow = document.createElement('tr');
+        headerRow.innerHTML = `
+<th class="table center header" id="th-rank" style="background:#000;color:#fff" onclick="sortTable(3)">Rank</th>
+<th class="table center header" id="th-avatar" onclick="sortTable(56)">Avatar</th>
+<th class="table center header hide" onclick="sortTable(0)">WID</th>
+<th class="table center header hide" onclick="sortTable(1)">AID</th>
+<th class="table center header hide" onclick="sortTable(2)">PID</th>
+<th class="table left header hide" id="th-registrationdate"  onclick="sortTable(11)">Registration Date</th>
+<th class="table left header" id="th-nickname" onclick="sortTable(4)">Nickname</th>
+<th class="table center header" id="th-age"  onclick="sortTable(57)">Age</th>
+<th class="table right header hide" id="th-mt4id"  onclick="sortTable(5)">MT4 ID</th>
+<th class="table center header" id="th-country"  onclick="sortTable('10')">CTRY</th>
+<th class="table center header" id="th-lvrg"  onclick="sortTable(9)">LVRG</th>
+<th class="table center header" id="th-accounttype"  onclick="sortTable(7)">Account</th>
+<th class="table center header" id="th-ccy"  onclick="sortTable(8)">CCY</th>
+<th class="table right header" id="th-balance"  onclick="sortTable(12)">Balance</th>
+<th class="table right header" id="th-equity"  onclick="sortTable(13)">Equity</th>
+<th class="table right header" id="th-floating"  onclick="sortTable(14)">Floating</th>
+<th class="table right header" id="th-margin"  onclick="sortTable(15)">Margin</th>
+<th class="table right header" id="th-freemargin"  onclick="sortTable(16)">Free Margin</th>
+<th class="table right header" id="th-credit"  onclick="sortTable(17)">Credit</th>
+<th class="table center header" id="th-fol"  onclick="sortTable(28)">FOL</th>
+<th class="table right header" id="th-aum"   onclick="sortTable(29)">AUM</th>
+<th class="table right header" id="th-pfee"   onclick="sortTable(30)">P.Fee</th>
+<th class="table right header" id="th-mfee"   onclick="sortTable(31)">M.Fee</th>
+<th class="table right header" id="th-rfee"   onclick="sortTable(58)">R.Fee</th>
+<th class="table right header" id="th-mindeposit"   onclick="sortTable(32)">Min Deposit</th>
+<th class="table right header" id="th-p1d"  onclick="sortTable(25)">P1D</th>
+<th class="table right header" id="th-t1d"  onclick="sortTable(26)">T1D</th>
+<th class="table right header" id="th-v1d"  onclick="sortTable(27)">V1D</th>
+<th class="table right header" id="th-return"  onclick="sortTable(18)">Return%</th>
+<th class="table right header" id="th-profit"  onclick="sortTable(19)">Profit </th>
+<th class="table right header" id="th-drawdown"  onclick="sortTable(20)">Drawdown%</th>
+<th class="table right header" id="th-monthly"  onclick="sortTable(22)">Monthly%</th>
+<th class="table right header" id="th-daily"  onclick="sortTable(23)">Daily%</th>
+<th class="table right header" id="th-rf"   onclick="sortTable(33)">RF</th>
+<th class="table right header" id="th-absgain"   onclick="sortTable(34)">Abs Gain</th>
+<th class="table right header" id="th-sharpe"   onclick="sortTable(35)">Sharpe</th>
+<th class="table right header" id="th-maxdd"   onclick="sortTable(36)">MaxDD%</th>
+<th class="table right header" id="th-mdp"   onclick="sortTable(37)">MDP</th>
+<th class="table right header" id="th-mdl"   onclick="sortTable(38)">MDL</th>
+<th class="table right header" id="th-adp"   onclick="sortTable(39)">ADP</th>
+<th class="table right header" id="th-adl"   onclick="sortTable(40)">ADL</th>
+<th class="table right header" id="th-rv"  onclick="sortTable(42)">RV</th>
+<th class="table right header" id="th-drv"   onclick="sortTable(41)">DRV</th>
+<th class="table right header" id="th-gdm"  onclick="sortTable(43)">GDM</th>
+<th class="table right header" id="th-gwm"   onclick="sortTable(44)">GWM</th>
+<th class="table right header" id="th-ndm"  onclick="sortTable(45)">NDM</th>
+<th class="table right header" id="th-vm"  onclick="sortTable(46)">VM</th>
+<th class="table right header" id="th-ralltime"  onclick="sortTable(47)">rAllTime</th>
+<th class="table right header" id="th-ryear"  onclick="sortTable(48)">rYear</th>
+<th class="table right header" id="th-rhalfyear"  onclick="sortTable(49)">rHalfYear</th>
+<th class="table right header" id="th-rquarter"  onclick="sortTable(50)">rQuarter</th>
+<th class="table right header" id="th-rmonth"  onclick="sortTable(51)">rMonth</th>
+<th class="table right header" id="th-rweek"  onclick="sortTable(52)">rWeek</th>
+<th class="table right header" id="th-rday"  onclick="sortTable(53)">rDay</th>
+<th class="table right header" id="th-rcalmonth"  onclick="sortTable(54)">rCalMonth</th>
+<th class="table right header" id="th-rprevmonth"  onclick="sortTable(55)">rPrevMonth</th>
+<th class="table center header" id="th-profile">Profile</th>
+<th class="table center header" id="th-action">Action</th>
+ `;
+        table.appendChild(headerRow);
+        
+        data.items.forEach(account => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+<td class="table center data">${account.rank ?? ''}</td>
+<td class="table center"><img src="${account.public.avatarPath ? account.public.avatarPath : 'avatar2.gif'}" alt="Avatar" class="avatar"></td>
+<td class="table center data hide">${account.widgetId ?? ''}</td>
+<td class="table center data hide">${account.accountId ?? ''}</td>
+<td class="table center data hide">${account.profileId ?? ''}</td>
+<td class="table left data hide">${account.account.registrationDate ?? ''}</td>
+<td class="table left data" style="-webkit-text-stroke:0.5px;letter-spacing:.02em;">${account.accountName ?? ''}</td>
+<td class="table center data">${account.age ?? ''}</td>
+<td class="table right data hide">${account.account.login ?? ''}</td>
+<td class="table center data">${account.account.countryCode}</td>
+<td class="table center data">${account.account.leverage.toLocaleString()}</td>
+<td class="table center data">${account.account.group ?? ''}</td>
+<td class="table center data">${account.account.currency ?? ''}</td>
+<td class="table right data">${(account.account.balance !== undefined) ? account.account.balance.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.account.equity !== undefined) ? account.account.equity.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.account.floatingPnL !== undefined) ? account.account.floatingPnL.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.account.margin !== undefined) ? account.account.margin.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.account.freeMargin !== undefined) ? account.account.freeMargin.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.account.credit !== undefined) ? account.account.credit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table center data">${account.extension.investors ?? ''}</td>
+<td class="table right data">${(account.extension.investorsEquity !== undefined) ? account.extension.investorsEquity.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.extension.performanceFee !== undefined) ? account.extension.performanceFee.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.extension.managementFee !== undefined) ? account.extension.managementFee.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.extension.registrationFee !== undefined) ? account.extension.registrationFee.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.extension.minBalance !== undefined) ? account.extension.minBalance.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.extension.p1d !== undefined) ? account.extension.p1d.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.extension.t1d !== undefined) ? account.extension.t1d.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.extension.v1d !== undefined) ? account.extension.v1d.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.extension.return !== undefined) ? account.extension.return.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.extension.profit !== undefined) ? account.extension.profit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.extension.drawdown !== undefined) ? account.extension.drawdown.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.extension.monthly !== undefined) ? account.extension.monthly.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.extension.daily !== undefined) ? account.extension.daily.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.recoveryFactor !== undefined) ? account.recoveryFactor.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.absoluteGain !== undefined) ? account.absoluteGain.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.sharpeRatio !== undefined) ? account.sharpeRatio.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.maxDrawdown !== undefined) ? account.maxDrawdown.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.maxDailyProfit !== undefined) ? account.maxDailyProfit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.maxDailyLoss !== undefined) ? account.maxDailyLoss.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.averageDailyProfit !== undefined) ? account.averageDailyProfit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.averageDailyLoss !== undefined) ? account.averageDailyLoss.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.returnVolatility !== undefined) ? account.returnVolatility.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.dailyReturnVolatility !== undefined) ? account.dailyReturnVolatility.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.grossDepositMonth !== undefined) ? account.grossDepositMonth.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.grossWithdrawalMonth !== undefined) ? account.grossWithdrawalMonth.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.netDepositMonth !== undefined) ? account.netDepositMonth.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${(account.volumeMonth !== undefined) ? account.volumeMonth.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : ''}</td>
+<td class="table right data">${account.returnAllTime ?? ''}</td>
+<td class="table right data">${account.returnYear ?? ''}</td>
+<td class="table right data">${account.returnHalfYear ?? ''}</td>
+<td class="table right data">${account.returnQuarter ?? ''}</td>
+<td class="table right data">${account.returnMonth ?? ''}</td>
+<td class="table right data">${account.returnWeek ?? ''}</td>
+<td class="table right data">${account.returnDay ?? ''}</td>
+<td class="table right data">${account.returnCalendarMonth ?? ''}</td>
+<td class="table right data">${account.returnPreviousMonth ?? ''}</td>
+<td class="table center data"><a href="https://socialrating.ultimamarkets.com/widgets/ratings/${account.accountId}?widgetKey=master0" target="_blank"><button id="profile-button">Profile</button></a></td>
+<td class="table center data"><a href="https://social.ultimamarkets.com/portal/registration/subscription?provider=${account.profileId}" target="_blank"><button id="subscribe-button">Copy</button></a></td>
+
+`;
+            table.appendChild(row);
+        });
+
+        container.appendChild(table);
+		
+		
+
+        const rows = table.getElementsByTagName('tr');
+        for (let i = 1; i < rows.length; i++) { 
+            rows[i].addEventListener('click', function() {
+               
+                const highlighted = document.querySelector('.highlight');
+                if (highlighted) {
+                    highlighted.classList.remove('highlight');
+                }
+               
+                this.classList.add('highlight');
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching data from API:', error);
+    }
+}
+
+
+function replaceValueInData(accounts) {
+  accounts.forEach(account => {
+    if (account.account.countryCode === 'HongKong') {
+      account.account.countryCode = 'HK';
+    }
+
+        let group = account.account.group ?? '';
+
+                if (group.includes('UM') && group.includes('USC')) {account.account.group = 'STP Cent';} 
+		else if (group.includes('UM') && group.includes('NM') && !group.includes('USC')) {account.account.group = 'STP Cent (sf)';} 
+		else if (group.includes('UME') && group.includes('USC')) {account.account.group = 'ECN Cent';}
+		else if (group.includes('UME') && group.includes('USC') && !group.includes('NM')) {account.account.group = 'ECN Cent (sf)';}
+		else if (group.includes('UM') && group.includes('NM') && !group.includes('USC')) {account.account.group = 'STP (sf)';}
+		else if (group.includes('UME') && group.includes('NM')) {account.account.group = 'ECN (sf)';}
+		else if (group.includes('UME')) {account.account.group = 'ECN';}
+		else if (group.includes('UM')) {account.account.group = 'STP';}
+		else if (group.includes('TEST_ST_USD')) {account.account.group = 'STP';}
+
+        console.log(`Modified group for account: ${account.account.group}`);
+      });
+    }
+
+
+fetchAndDisplayAPIData();
+
+function setLanguage(language) {
+    const headerTitle = document.getElementById('header-title');
+	const profileButtons = document.querySelectorAll('button[id^="profile-button"]');
+    const subscribeButtons = document.querySelectorAll('button[id^="subscribe-button"]');
+    
+    if (language === 'en') {
+        headerTitle.textContent = 'M A S T E R B O A R D';
+		profileButtons.forEach(button => {button.textContent = 'Profile';});        
+        subscribeButtons.forEach(button => {button.textContent = 'Copy';});				
+		document.getElementById('th-avatar').textContent = 'Avatar';
+        document.getElementById('th-rank').textContent = 'Rank';
+        document.getElementById('th-registrationdate').textContent = 'Registration Date';
+        document.getElementById('th-nickname').textContent = 'Nickname';
+        document.getElementById('th-age').textContent = 'Age';
+        document.getElementById('th-mt4id').textContent = 'MT4 ID';       
+        document.getElementById('th-country').textContent = 'CTRY';
+        document.getElementById('th-lvrg').textContent = 'LVRG';
+		document.getElementById('th-accounttype').textContent = 'Account';
+        document.getElementById('th-ccy').textContent = 'CCY';      
+        document.getElementById('th-balance').textContent = 'Balance';
+        document.getElementById('th-equity').textContent = 'Equity';
+        document.getElementById('th-floating').textContent = 'Floating';
+        document.getElementById('th-margin').textContent = 'Margin';
+        document.getElementById('th-freemargin').textContent = 'Free Margin';
+        document.getElementById('th-credit').textContent = 'Credit';
+		document.getElementById('th-fol').textContent = 'FOL';
+		document.getElementById('th-aum').textContent = 'AUM';
+		document.getElementById('th-pfee').textContent = 'P.Fee';
+		document.getElementById('th-mfee').textContent = 'M.Fee';
+		document.getElementById('th-rfee').textContent = 'R.Fee';
+		document.getElementById('th-mindeposit').textContent = 'Min Deposit';
+		document.getElementById('th-p1d').textContent = 'Profit(1D)';
+		document.getElementById('th-t1d').textContent = 'Trades(1D)';
+		document.getElementById('th-v1d').textContent = 'Volume(1D)';
+        document.getElementById('th-return').textContent = 'Return%';
+        document.getElementById('th-profit').textContent = 'Profit';
+		document.getElementById('th-drawdown').textContent = 'Drawdown%';
+		document.getElementById('th-monthly').textContent = 'Monthly%';
+		document.getElementById('th-daily').textContent = 'Daily%';
+		document.getElementById('th-rf').textContent = 'RF';
+		document.getElementById('th-absgain').textContent = 'Abs Gain';
+		document.getElementById('th-sharpe').textContent = 'Sharpe';
+		document.getElementById('th-maxdd').textContent = 'MaxDD%';
+		document.getElementById('th-mdp').textContent = 'MDP';
+		document.getElementById('th-mdl').textContent = 'MDL';
+		document.getElementById('th-adp').textContent = 'ADP';
+		document.getElementById('th-adl').textContent = 'ADL';
+		document.getElementById('th-rv').textContent = 'RV';
+		document.getElementById('th-drv').textContent = 'DRV';		
+		document.getElementById('th-gdm').textContent = 'GDM';
+		document.getElementById('th-gwm').textContent = 'GWM';
+		document.getElementById('th-ndm').textContent = 'NDM';
+		document.getElementById('th-vm').textContent = 'VM';
+		document.getElementById('th-ralltime').textContent = 'rAllTime';
+		document.getElementById('th-ryear').textContent = 'rYear';
+		document.getElementById('th-rhalfyear').textContent = 'rHalfYear';
+		document.getElementById('th-rquarter').textContent = 'rQuarter';
+		document.getElementById('th-rmonth').textContent = 'rMonth';
+		document.getElementById('th-rweek').textContent = 'rWeek';
+		document.getElementById('th-rday').textContent = 'rDay';
+		document.getElementById('th-rcalmonth').textContent = 'rCalMonth';
+		document.getElementById('th-rprevmonth').textContent = 'rPrevMonth';
+		document.getElementById('th-profile').textContent = 'Profile';
+		document.getElementById('th-action').textContent = 'Action';
+		
+    } else if (language === 'zh') {
+        headerTitle.textContent = '琅 琊 榜';
+		profileButtons.forEach(button => {button.textContent = '主页';});        
+        subscribeButtons.forEach(button => {button.textContent = '复制';});		
+		document.getElementById('th-avatar').textContent = '头像';
+		document.getElementById('th-rank').textContent = '排名';
+        document.getElementById('th-registrationdate').textContent = '注册日期';
+        document.getElementById('th-nickname').textContent = '策略名称';
+        document.getElementById('th-age').textContent = '活跃 (天)';
+        document.getElementById('th-mt4id').textContent = 'MT4 ID';
+        document.getElementById('th-country').textContent = '国家';
+        document.getElementById('th-lvrg').textContent = '杠杆';
+		document.getElementById('th-accounttype').textContent = '账户';
+        document.getElementById('th-ccy').textContent = '币种';      
+        document.getElementById('th-balance').textContent = '结余';
+        document.getElementById('th-equity').textContent = '净值';
+        document.getElementById('th-floating').textContent = '浮动盈亏';
+        document.getElementById('th-margin').textContent = '预付款';
+        document.getElementById('th-freemargin').textContent = '可用预付款';
+        document.getElementById('th-credit').textContent = '信用金';
+		document.getElementById('th-fol').textContent = 'FOL';
+		document.getElementById('th-aum').textContent = 'AUM';
+		document.getElementById('th-pfee').textContent = '绩效费 (PF)';
+		document.getElementById('th-mfee').textContent = '订阅费 (MF)';
+		document.getElementById('th-rfee').textContent = '注册费 (RF)';
+		document.getElementById('th-mindeposit').textContent = '最低跟单金额';
+		document.getElementById('th-p1d').textContent = '每日交易盈亏';
+		document.getElementById('th-t1d').textContent = '每日交易次数';
+		document.getElementById('th-v1d').textContent = '每日交易手数';
+        document.getElementById('th-return').textContent = '总回报率%';
+        document.getElementById('th-profit').textContent = '总盈亏';
+		document.getElementById('th-drawdown').textContent = '最大回撤%';
+		document.getElementById('th-monthly').textContent = '回报率 (本月)';
+		document.getElementById('th-daily').textContent = '回报率 (每日)';
+		document.getElementById('th-rf').textContent = '恢复系数';
+		document.getElementById('th-absgain').textContent = '绝对收益';
+		document.getElementById('th-sharpe').textContent = '夏普比率';
+		document.getElementById('th-maxdd').textContent = '最大回撤%';
+		document.getElementById('th-mdp').textContent = '最大日盈利';
+		document.getElementById('th-mdl').textContent = '最大日亏损';
+		document.getElementById('th-adp').textContent = '平均日盈利';
+		document.getElementById('th-adl').textContent = '平均日亏损';
+		document.getElementById('th-rv').textContent = '回报波动率';
+		document.getElementById('th-drv').textContent = '每日回报波动率';		
+		document.getElementById('th-gdm').textContent = '总入金 (本月)';
+		document.getElementById('th-gwm').textContent = '总出金 (本月)';
+		document.getElementById('th-ndm').textContent = '净出金 (本月)';
+		document.getElementById('th-vm').textContent = '交易量 (本月)';
+		document.getElementById('th-ralltime').textContent = '总回报';
+		document.getElementById('th-ryear').textContent = '回报率 (年)';
+		document.getElementById('th-rhalfyear').textContent = '回报率 (半年)';
+		document.getElementById('th-rquarter').textContent = '回报率 (季度)';
+		document.getElementById('th-rmonth').textContent = '回报率 (本月)';
+		document.getElementById('th-rweek').textContent = '回报率 (本周)';
+		document.getElementById('th-rday').textContent = '回报率 (当日)';
+		document.getElementById('th-rcalmonth').textContent = '回报率 (日历月)';
+		document.getElementById('th-rprevmonth').textContent = '回报率 (上月)';
+		document.getElementById('th-profile').textContent = '主页';
+		document.getElementById('th-action').textContent = '操作';		
+           }
+}
+
+       function sortTable(columnIndex) {
+                var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+                table = document.querySelector("table");
+                switching = true;
+                dir = "asc";
+
+                while (switching) {
+                    switching = false;
+                    rows = table.rows;
+
+                    for (i = 1; i < (rows.length - 1); i++) {
+                        shouldSwitch = false;
+                        x = rows[i].getElementsByTagName("TD")[columnIndex];
+                        y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+
+                        const xContent = x.textContent || x.innerText;
+                        const yContent = y.textContent || y.innerText;
+
+                        const xNumber = parseFloat(xContent.replace(/,/g, ''));
+                        const yNumber = parseFloat(yContent.replace(/,/g, ''));
+
+                        if (!isNaN(xNumber) && !isNaN(yNumber)) {
+                            if (dir == "asc") {
+                                if (xNumber > yNumber) {
+                                    shouldSwitch = true;
+                                    break;
+                                }
+                            } else if (dir == "desc") {
+                                if (xNumber < yNumber) {
+                                    shouldSwitch = true;
+                                    break;
+                                }
+                            }
+                        } else {
+                            if (dir == "asc") {
+                                if (xContent.toLowerCase() > yContent.toLowerCase()) {
+                                    shouldSwitch = true;
+                                    break;
+                                }
+                            } else if (dir == "desc") {
+                                if (xContent.toLowerCase() < yContent.toLowerCase()) {
+                                    shouldSwitch = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (shouldSwitch) {
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        switching = true;
+                        switchcount++;
+                    } else {
+                        if (switchcount == 0 && dir == "asc") {
+                            dir = "desc";
+                            switching = true;
+                        }
+                    }
+                }
+            }
+    </script>
+</body>
+
+</html>

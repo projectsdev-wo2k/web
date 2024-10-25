@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masterboard</title>
+    <style>
+@font-face{font-family:tahoma;src:url(https://masterboard.netlify.app/tahoma.woff2);}
+@font-face{font-family:tahomabd;src:url(https://masterboard.netlify.app/tahomabd.woff2);}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+        body {
+            font-family: tahoma;
+            margin: 0;
+            padding: 20px;
+            background-color: #f7f9fc;
+			-webkit-text-stroke: 0.4px;
+        }
+
+.dashboard-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.account-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+  .account.card:hover {
+    transform: translateY(-5px);
+  }
+
+   .account-card img {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 10px;
+  }
+
+        .account-info {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .account-info h3 {
+			font-family:tahomabd;
+			-webkit-text-stroke: 0.2px;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .account-info p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .account-stats {
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .account-stats p {
+            font-size: 14px;
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+			-webkit-text-stroke: 0.4px;
+        }
+
+        .action-button {
+            background-color: #000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+            text-align: center;
+			font-size: 14px;
+        }
+
+        .action-button:hover {
+            background-color: #d2fc61;
+			color:#000;
+        }
+		
+ @media (min-width: 600px) {
+    .dashboard {
+      justify-content: flex-start;
+    }
+  }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container" id="dashboardContainer">
+    <!-- Dashboard cards will be injected here -->
+</div>
+
+<script>
+async function fetchAccountData() {
+    const apiUrl = 'https://socialrating.ultimamarkets.com/api/rating/8?$count=true&widget_key=master0';
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    return data.items;
+}
+
+function createAccountCard(account) {
+    const card = document.createElement('div');
+    card.classList.add('account-card');
+
+    const accountHtml = `
+        <img src="${account.public.avatarPath ? account.public.avatarPath : 'https://masterboard.netlify.app/avatar2.gif'}" alt="Avatar">
+        <div class="account-info">
+            <h3>${account.accountName ?? 'Unknown'} (${account.account.countryCode})</h3>
+            <p>Followers : ${account.extension.investors ?? '-'} &nbsp; AUM : ${account.extension.investorsEquity ?? '-'}</p>
+        </div>
+        <div class="account-stats">
+            <p><span>Balance :</span> <span>${parseFloat(account.account.balance).toLocaleString()}</span></p>
+            <p><span>Equity :</span> <span>${parseFloat(account.account.equity).toLocaleString()}</span></p>
+			<p><span>Account :</span> <span>${account.account.group ?? ''}</span></p>
+            <p><span>Leverage :</span> <span>${account.account.leverage ?? '-'}</span></p>
+            <p><span>Perf. Fee :</span> <span>${account.extension.performanceFee ?? '-'}%</span></p>
+        </div>
+        <button class="action-button" onclick="window.open('https://social.ultimamarkets.com/portal/registration/subscription?provider=${account.profileId}', '_blank')">Copy</button>
+    `;
+
+    card.innerHTML = accountHtml;
+    return card;
+}
+
+async function displayAccountDashboards() {
+    const dashboardContainer = document.getElementById('dashboardContainer');
+    const accounts = await fetchAccountData();
+
+    accounts.forEach(account => {
+        const card = createAccountCard(account);
+        dashboardContainer.appendChild(card);
+    });
+}
+
+
+
+displayAccountDashboards();
+
+
+</script>
+
+</body>
+</html>

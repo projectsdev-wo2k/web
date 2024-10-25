@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index 6</title>
+	
+	
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 0;
+        padding: 0;
+        -webkit-text-stroke: 0.5px;
+        font-size: 13px!important;
+        letter-spacing: .02em!important;
+      }
+
+      .navbar {
+        display: flex;
+        background-color: #fff;
+        justify-content: space-between;
+        padding: 10px;
+        border-bottom: 1px solid #f3f5f7;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .navbar-left {
+        display: flex;
+        align-items: center;
+        margin-left: 50px !important;
+        margin: 0 auto;
+      }
+
+      .navbar-right {
+        display: flex;
+        align-items: center;
+      }
+
+      .navbar a {
+        color: #000;
+        padding: 10px 15px;
+        text-decoration: none;
+        text-align: left;
+        display: inline-block;
+        font-size: 13px!important;
+		border-radius:4px;
+      }
+
+      .navbar a:hover {
+        color: #000;
+        background: #f3f5f7;
+      }
+
+      a.filter:hover {
+        color: #000;
+        border-color: #002D4E;
+        background-color: #fff;
+        box-shadow: #002D4E 2px 0px 0px 0px inset;
+      }
+
+      a.filter:active, a.filter:focus {
+        color: #000;
+        border-color: #002D4E;
+        background-color: #bee0e7;
+        box-shadow: #002D4E 2px 0px 0px 0px inset;
+      }
+
+      a.filter {
+        border: 1px solid rgb(231, 231, 231);
+        display: inline-flex!important;
+        -webkit-box-align: center;
+        align-items: center;
+        background-color: rgb(255, 255, 255);
+        border-radius: 3px;
+        padding: 5px 16px!important;
+        margin: 3px;
+        font-size: 13px!important;
+      }
+
+      .menu-btn:active, .menu-btn:focus {
+        color: #000;
+        border-color: #002D4E;
+        background-color: #BEE0E7;
+        box-shadow: #002D4E 2px 0px 0px 0px inset;
+      }
+
+      .menu-btn {
+        border: 1px solid rgb(231, 231, 231);
+        display: inline-flex!important;
+        -webkit-box-align: center;
+        align-items: center;
+        background-color: rgb(255, 255, 255);
+        border-radius: 3px;
+        padding: 5px 16px!important;
+        margin: 3px;
+        font-size: 13px!important;
+      }
+
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+
+      .dropdown-btn {
+        background-color: #fff;
+        border: none;
+        cursor: pointer;
+        font-size: 13px;
+        padding: 5px 16px;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        color: #000;
+        border-color: #002D4E;
+        background-color: #cef3e8;
+        box-shadow: #002D4E 2px 0px 0px 0px inset;
+        min-width: 150px;
+        z-index: 1;
+        right: 0;
+		padding-top: 2px;
+		padding-bottom: 2px;
+      }
+
+      .dropdown-content a {
+        border: 0px solid #bee0e7;
+        color: #000;
+        border-radius: 0px;
+        padding: 10px 14px!important;
+        text-decoration: none;
+        display: block;
+        width: 120px;
+		
+      }
+
+      .dropdown-content a:hover {
+        background-color: #fff;
+        border-color: #002D4E;
+        box-shadow: #002D4E 2px 0px 0px 0px inset;
+      }
+
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+
+      .lang-btn {
+        background-color: #fff;
+        border: 0px solid #ddd!important;
+        padding: 5px 16px;
+        cursor: pointer;
+        margin-left: 0px;
+        font-size: 13px!important;
+      }
+
+      .icon {
+        margin-right: 8px;
+        color: #0073e6;
+        font-size: 13px;
+      }
+
+      .iframe-container {
+        width: 100%;
+        height: 120vh;
+        border: none;
+      }
+
+      .preloader {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color:#fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      .loader {
+        border: 6px solid #f3f5f7;
+        border-top: 6px solid #000;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 2s ease-out infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .lang-select {
+        padding: 5px 8px;
+        font-size: 13px;
+        border: 1px solid rgb(231, 231, 231);
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar {
+        width: 7px;
+        height: 5px;
+      }
+
+      ::-webkit-scrollbar-track {
+        border-radius: 10px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #f3f5f7;
+        border-radius: 10px;
+        width: 8px;
+        height: 5px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #303030;
+        width: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="preloader" class="preloader">
+      <div class="loader"></div>
+    </div>
+    <div class="navbar">
+      <select id="languageSelect" class="lang-select" onchange="switchLanguage()">
+        <option value="en">English</option>
+        <option value="zh-cn">中文 (简)</option>
+        <option value="zh-tw">中文 (繁)</option>
+      </select>
+      <div class="navbar-left">
+        <a class="filter" aria-current="page" href="#ROI" onclick="changeIframeSrc('https://socialrating.ultimarkets.com/widgets/ratings?widgetKey=master-1')">ROI</a>
+        <a class="filter" aria-current="page" href="#Profit" onclick="changeIframeSrc('https://socialrating.ultimarkets.com/widgets/ratings?widgetKey=master-2')">Profit</a>
+        <a class="filter" aria-current="page" href="#Drawdown" onclick="changeIframeSrc('https://socialrating.ultimamarkets.com/widgets/ratings?widgetKey=masterdd')">Drawdown</a>
+        <a class="filter" aria-current="page" href="#Followers" onclick="changeIframeSrc('https://socialrating.ultimarkets.com/widgets/ratings?widgetKey=master-4')">Followers</a>
+        <a class="filter" aria-current="page" href="#Volume" onclick="changeIframeSrc('https://socialrating.ultimarkets.com/widgets/ratings?widgetKey=master-5')">Volume</a>
+        <a class="filter" aria-current="page" href="#Commission" onclick="changeIframeSrc('https://socialrating.ultimarkets.com/widgets/ratings?widgetKey=master-6')">Commission</a>
+      </div>
+      <div class="navbar-right">
+	  <a href="#toolbar" onclick="changeIframeSrc('https://socialrating.ultimarkets.com/widgets/ratings?widgetKey=master-1')">Leaderboard</a>
+      <a href="#faq" onclick="changeIframeSrc('masterboard3.html')">Masterboard</a>
+	  <a href="#faq" onclick="changeIframeSrc('umhelpe.html')">FAQs</a>
+        <div class="dropdown">
+          <button class="dropdown-btn">Register  &nbsp;􀆈</button>
+          <div class="dropdown-content">
+            <a href="#Master" onclick="changeIframeSrc('https://social.ultimamarkets.com/portal/registration/provider')">Become a Master</a>
+            <a href="#Follower" onclick="changeIframeSrc('https://social.ultimamarkets.com/portal/registration/subscription')">Become a Follower</a>
+          </div>
+        </div>
+        <button class="menu-btn" href="#Login" onclick="changeIframeSrc('https://social.ultimamarkets.com/portal/login')">Login</button>
+      </div>
+    </div>
+    <iframe id="contentFrame" class="iframe-container" src="masterboard3.html" onload="hidePreloader()"></iframe>
+    <script>
+      const languageUrls = {
+        'en': 'https://www.example.com',
+        'fr': 'https://www.example.com/fr',
+        'es': 'https://www.example.com/es',
+        'de': 'https://www.example.com/de'
+      };
+
+      const translations = {
+        'en': {
+          'home': 'Home',
+          'services': 'Services',
+          'contact': 'Contact',
+          'menu': 'Menu'
+        },
+        'fr': {
+          'home': 'Accueil',
+          'services': 'Services',
+          'contact': 'Contact',
+          'menu': 'Menu'
+        },
+        'es': {
+          'home': 'Inicio',
+          'services': 'Servicios',
+          'contact': 'Contacto',
+          'menu': 'Menú'
+        },
+        'de': {
+          'home': 'Startseite',
+          'services': 'Dienstleistungen',
+          'contact': 'Kontakt',
+          'menu': 'Menü'
+        }
+      };
+
+      function changeIframeSrc(url) {
+        showPreloader();
+        document.getElementById('contentFrame').src = url;
+      }
+
+      function showPreloader() {
+        document.getElementById('preloader').style.display = 'flex';
+      }
+
+      function hidePreloader() {
+        document.getElementById('preloader').style.display = 'none';
+      }
+
+      function switchLanguage() {
+        const languageSelect = document.getElementById('languageSelect');
+        const selectedLanguage = languageSelect.value;
+
+        const newSrc = languageUrls[selectedLanguage];
+        changeIframeSrc(newSrc);
+
+        updateMenuText(selectedLanguage);
+      }
+
+      function updateMenuText(language) {
+        document.getElementById('homeLink').textContent = translations[language].home;
+        document.getElementById('servicesLink').textContent = translations[language].services;
+        document.getElementById('contactLink').textContent = translations[language].contact;
+        document.getElementById('menuButton').textContent = translations[language].menu;
+      }
+
+      window.onload = function() {
+        hidePreloader();
+      }
+      ;
+    </script>
+  </body>
+</html>
