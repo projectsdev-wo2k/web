@@ -10,7 +10,7 @@
 @font-face{font-family:tahoma;src:url(tahoma.woff2);}
 @font-face{font-family:tahomabd;src:url(tahomabd.woff2);}
 
-body{font-family:tahoma;-webkit-text-stroke:0.4px!important;margin:10px 30px 10px 15px;}
+body{font-family:tahoma;-webkit-text-stroke:0.4px!important;margin:10px 30px 10px 5px;}
 h2{display:inline-flex;align-items:center;font-family:tahomabd;font-weight:400;font-size:18px;-webkit-text-stroke:1px;margin-top:0px;margin-bottom:10px;}
 .title-text{margin-left:10px;margin-right:10px;}
 .header-icon{width:36px;height:36px;}
@@ -210,7 +210,7 @@ table.appendChild(headerRow);
 data.items.forEach(account => {
     const row = document.createElement('tr');
     row.innerHTML = `
-    <td class="table center data black" style="padding: 0 4px;">${account.rank ?? ''}</td>
+    <td class="table center data" style="padding: 0 4px;">${account.rank ?? ''}</td>
     <td class="table center"><a href="https://socialrating.ultimamarkets.com/widgets/ratings/${account.accountId}?widgetKey=master0" target="_blank"><img src="${account.public.avatarPath ? account.public.avatarPath : 'avatar2.gif'}" alt="Avatar" class="avatar"></td>
     <td class="table center data hide">${account.widgetId ?? ''}</td>
     <td class="table center data hide">${account.accountId ?? ''}</td>
